@@ -3,9 +3,11 @@ package br.ufpe.cin.android.podcast.database
 import android.content.Context
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.room.Room.databaseBuilder as databaseBuilder
 
-@Database(entities = [ItemModel::class], version = 1)
+@Database(entities = [ItemModel::class], version = 2)
 abstract class ItemDatabase : RoomDatabase() {
 
     abstract fun itemDAO(): ItemDAO
@@ -18,6 +20,7 @@ abstract class ItemDatabase : RoomDatabase() {
                 synchronized(ItemDatabase::class) {
                     INSTANCE = databaseBuilder(context.applicationContext,
                         ItemDatabase::class.java, "item.db")
+                        .fallbackToDestructiveMigration()
                         .build()
                 }
             }

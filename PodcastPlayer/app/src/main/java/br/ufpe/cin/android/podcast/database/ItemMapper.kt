@@ -10,7 +10,8 @@ class ItemMapper {
                 itemDTO.link,
                 itemDTO.pubDate,
                 itemDTO.description,
-                itemDTO.downloadLink
+                itemDTO.downloadLink,
+                itemDTO.fileLocation
             )
         }
 
@@ -20,7 +21,8 @@ class ItemMapper {
                 itemModel.link,
                 itemModel.pubDate,
                 itemModel.description,
-                itemModel.downloadLink
+                itemModel.downloadLink,
+                itemModel.fileLocation
             )
         }
     }

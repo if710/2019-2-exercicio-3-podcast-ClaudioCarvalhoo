@@ -32,6 +32,12 @@ class CustomAdapter(private val items: List<ItemFeed>, private val context: Cont
             intent.putExtra("downloadLink", item.downloadLink)
             startActivity(context, intent, null)
         }
+        holder.button.setOnClickListener{
+            val intent = Intent(this.context, DownloadIntentService::class.java)
+            intent.putExtra("url", item.downloadLink)
+            intent.putExtra("title", item.title)
+            this.context.startService(intent)
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

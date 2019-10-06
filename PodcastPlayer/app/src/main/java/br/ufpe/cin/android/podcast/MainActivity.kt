@@ -1,7 +1,11 @@
 package br.ufpe.cin.android.podcast
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.ufpe.cin.android.podcast.database.ItemDatabase
 import br.ufpe.cin.android.podcast.database.ItemMapper
@@ -12,10 +16,19 @@ import java.lang.Exception
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
+    private val STORAGE_PERMISSION_CODE: Int = 74
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                STORAGE_PERMISSION_CODE
+            )
+        }
 
         downloadXML()
     }
@@ -28,7 +41,9 @@ class MainActivity : AppCompatActivity() {
                     URL("https://s3-us-west-1.amazonaws.com/podcasts.thepolyglotdeveloper.com/podcast.xml").readText()
                 val itemFeeds = Parser.parse(feed)
                 for (item in itemFeeds) {
-                    db!!.itemDAO().insert(ItemMapper.toModel(item))
+                    if (db!!.itemDAO().existsByTitle(item.title) == 0L){
+                        db.itemDAO().insert(ItemMapper.toModel(item))
+                    }
                 }
             }catch (e: Exception){
                 println("app is offline")
