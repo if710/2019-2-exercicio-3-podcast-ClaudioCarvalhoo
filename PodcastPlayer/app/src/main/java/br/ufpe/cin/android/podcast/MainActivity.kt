@@ -16,7 +16,8 @@ import java.lang.Exception
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
-    private val STORAGE_PERMISSION_CODE: Int = 74
+    private val WRITE_STORAGE_PERMISSION_CODE: Int = 74
+    private val READ_STORAGE_PERMISSION_CODE: Int = 74
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +27,14 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                STORAGE_PERMISSION_CODE
+                WRITE_STORAGE_PERMISSION_CODE
+            )
+        }
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                READ_STORAGE_PERMISSION_CODE
             )
         }
 
